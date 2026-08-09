@@ -20,7 +20,7 @@ export default function PageView({
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar userName={userName} />
+      <Navbar userName={userName} isLoggedIn={!!userId} />
       <main className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
         <div className="space-y-5">
           {blocks.length === 0 && (
