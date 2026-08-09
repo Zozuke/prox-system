@@ -53,6 +53,13 @@ export default function AdminPagesList() {
     load();
   }
 
+  async function setAsHome(page: Page) {
+    if (page.is_home) return;
+    await supabase.from('pages').update({ is_home: false }).neq('id', page.id);
+    await supabase.from('pages').update({ is_home: true, is_published: true }).eq('id', page.id);
+    load();
+  }
+
   async function deletePage(page: Page) {
     if (!confirm(`¿Borrar la página "${page.title}"? Esto también borrará sus bloques.`)) return;
     await supabase.from('pages').delete().eq('id', page.id);
@@ -107,6 +114,13 @@ export default function AdminPagesList() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setAsHome(page)}
+                  title="Usar esta página como inicio del sitio"
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${page.is_home ? 'bg-[var(--brand-500)] text-white' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
+                >
+                  🏠 {page.is_home ? 'Es inicio' : 'Usar como inicio'}
+                </button>
                 <button
                   onClick={() => toggleNav(page)}
                   title="Mostrar u ocultar en el menú de navegación"
