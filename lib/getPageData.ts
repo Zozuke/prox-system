@@ -14,12 +14,13 @@ export async function getPageData(slug: string) {
     profile = data as Profile | null;
   }
 
-  const { data: page } = await supabase
-    .from('pages')
-    .select('*')
-    .eq('slug', slug)
-    .eq('is_published', true)
-    .maybeSingle();
+  // "home" es un valor especial: busca la página marcada como inicio (is_home),
+  // sin importar cuál sea su slug real. Cualquier otro valor busca por slug normal.
+  const query = supabase.from('pages').select('*').eq('is_published', true);
+  const { data: page } =
+    slug === 'home'
+      ? await query.eq('is_home', true).maybeSingle()
+      : await query.eq('slug', slug).maybeSingle();
 
   if (!page) return { page: null, blocks: [] as Block[], profile, userId: user?.id };
 
