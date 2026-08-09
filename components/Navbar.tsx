@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import LogoutButton from './LogoutButton';
 import type { Page } from '@/lib/types';
 
-export default function Navbar({ userName }: { userName?: string }) {
+export default function Navbar({ userName, isLoggedIn }: { userName?: string; isLoggedIn?: boolean }) {
   const [navPages, setNavPages] = useState<Page[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -51,9 +51,9 @@ export default function Navbar({ userName }: { userName?: string }) {
         )}
 
         <div className="flex items-center gap-3">
-          {userName ? (
+          {isLoggedIn ? (
             <>
-              <span className="hidden text-sm text-slate-500 sm:inline">Hola, {userName}</span>
+              <span className="hidden text-sm text-slate-500 sm:inline">Hola, {userName || 'usuario'}</span>
               <LogoutButton />
             </>
           ) : (
